@@ -26,6 +26,7 @@ function App() {
           <Router>
                 <Routes>
                     <Route index element={<Home />}></Route>
+                    <Route path="/kenny" element={<Home />}></Route>
                     <Route path="/product" element={<Product />}></Route>
                     <Route path="/detail/:id" element={<ProductDetail />}></Route>
                     <Route path="/register" element={<Register />}></Route>

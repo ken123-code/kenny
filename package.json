@@ -2,7 +2,7 @@
   "name": "buoi3",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ken123-code.github.io/kenny/",
+  "homepage": "https://ken123-code.github.io/kenny",
   "dependencies": {
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
