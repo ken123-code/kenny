@@ -1,0 +1,79 @@
+.css-cuefkz-MuiContainer-root {
+    /* width: 100%; */
+    margin-left: auto;
+    box-sizing: border-box;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: block;
+    padding-left: 16px;
+    padding-right: 16px;
+    text-align: center;
+}
+@media screen and (max-width: 700px) {
+    .css-14dv4nr-MuiFormControl-root-MuiTextField-root {
+        display: -webkit-inline-box;
+        display: -webkit-inline-flex;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        position: relative;
+        min-width: 0;
+        padding: 0;
+        margin: 0;
+        border: 0;
+        vertical-align: top;
+        margin: 8px;
+        width: 100% !important;
+        height: -webkit-fit-content;
+        height: -moz-fit-content;
+        height: fit-content;
+    }
+    .css-kablzu-MuiTypography-root {
+        margin: 0;
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        font-weight: 300;
+        font-size: 2rem !important;
+        line-height: 1.2;
+        letter-spacing: -0.00833em;
+        max-height: 50px;
+    }
+}
+.css-16pdh2b-MuiContainer-root {
+    background-image: url("https://wallpapers.com/images/featured/book-5q6xbfxwtbme5kaj.webp");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+}
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+    
+    border-color: white !important;
+    border-width: 4px !important;
+}
+
+.css-1wc848c-MuiFormHelperText-root {
+    color: white !important;
+}
+.css-1lwa3th-MuiFormLabel-root-MuiInputLabel-root {
+    color: white !important;
+}
+.css-mk9tez-MuiFormLabel-root-MuiInputLabel-root {
+    color: white !important;
+    font-weight: bolder;
+}
+.css-1lczath-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+    color: white !important;
+    font-weight: bolder;
+}
+.css-tgtj3v{
+    transform: translateY(-100px);
+}
+@media screen and (max-width: 600px) {
+    .css-tgtj3v{
+        transform: translateY(-50px);
+    }
+}

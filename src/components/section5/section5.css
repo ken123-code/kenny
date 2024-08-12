@@ -1,0 +1,53 @@
+@media screen and (max-width: 600px) {
+   .css-gjw55 {
+    width: 90% !important;
+    margin-bottom: 40px;
+    margin-left: 0px !important;
+    }
+    .css-iisvcl-MuiGrid2-root {
+        margin-left: 15px;
+    }
+    .css-yezpsm {
+        width: 370px !important;
+    }
+}
+.css-gjw55 {
+    width: 100% !important;
+}
+.css-sftz05-MuiGrid2-root {
+    justify-content: center;
+}
+.css-tttlff-MuiGrid2-root {
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    display: flex !important;
+    -webkit-flex-basis: auto;
+    -ms-flex-preferred-size: auto;
+    flex-basis: auto;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: calc(100%* 4 / var(--Grid-columns));
+    min-width: 0;
+    box-sizing: border-box;
+    padding: calc(var(--Grid-rowSpacing) / 2) calc(var(--Grid-columnSpacing) / 2);
+}
+
+.css-yezpsm {
+    background-color: #fff;
+    width: 400px;
+    text-align: center;
+    margin-top: 15px !important;
+}
+.css-ahj2mt-MuiTypography-root {
+    margin: 0;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    align-items: flex-start !important;
+    flex-direction: column !important;
+    display: flex !important;
+    letter-spacing: 0.00938em;
+}

@@ -1,0 +1,16 @@
+.text-white{
+    color: #FFFFF8 !important;
+    font-weight: 700;
+    font-family: 'monospace';
+    text-decoration: 'none' !important;
+}
+.bg-blue {
+    background: #1976D2;
+}
+.bg-blue-light{
+    background-color: #25CCF7;
+}
+
+*{
+    box-sizing: border-box;
+}
