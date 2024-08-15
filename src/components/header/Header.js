@@ -1,55 +1,34 @@
-import { useContext, useState } from "react";
-import * as React from "react";
-import "./header.css";
-import { AppContext } from "../../AppContext";
+import React, { useState, useContext } from 'react';
+import { AppContext } from '../../AppContext';
+import { Link } from 'react-router-dom';
 import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText,
-  ListGroupItem,
-  ListGroup,
-} from "reactstrap";
-import { Link } from "react-router-dom";
-import Button from "@mui/material/Button";
-import { ButtonBase } from "@mui/material";
-// MUI marerial
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Button,
+  Menu,
+  MenuItem,
+  Box,
+  Tooltip,
+  Container
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import AdbIcon from '@mui/icons-material/Adb';
+import CartIcon from '@mui/icons-material/ShoppingCart';
 
 const pages = ["Product", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export default function Header() {
-  // const {count,setCount}=useContext(AppContext);
-  const [collapsed, setCollapsed] = useState(true);
-  const toggleNavbar = () => setCollapsed(!collapsed);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const { cart } = useContext(AppContext);
-  //
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -61,68 +40,71 @@ export default function Header() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
   return (
     <>
-      {/* <Navbar color='faded' light expand="md">
-        <NavbarBrand href="/" className='me-2'>
-        reactstrap
-        </NavbarBrand>
-        <NavbarToggler onClick={toggleNavbar} className='me-2'/>
-        <Collapse isOpen={!collapsed} navbar>
-          <Nav className="me-auto" navbar>
-            <NavItem>
-              <NavLink href="/components/">Components</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="https://github.com/reactstrap/reactstrap">
-                GitHub
-              </NavLink>
-            </NavItem>
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                Options
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>Option 1</DropdownItem>
-                <DropdownItem>Option 2</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Reset</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          </Nav>
-          <NavbarText>Simple Text</NavbarText>
-        </Collapse>
-        <Button to="/cart" variant="contained">Cart <span>{cart.length}</span> </Button>
-      </Navbar> */}
-      {/* <h1>Count: {count}</h1>
-      <Button onClick={()=>setCount(count +1)}>Count up</Button> */}
-
-      <AppBar position="static">
+      <AppBar position="fixed" color="primary" sx={{ height: 64, zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            {/* Logo Section */}
+            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: 'white' }} />
             <Typography
               variant="h6"
               noWrap
               component={Link}
-              to={"/"}
+              to="/"
               sx={{
                 mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
                 fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none'
               }}
             >
               Reactstrap
             </Typography>
+            <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, color: 'white' }} />
+            <Typography
+              variant="h5"
+              noWrap
+              component={Link}
+              to="/"
+              sx={{
+                mr: 2,
+                display: { xs: 'flex', md: 'none' },
+                flexGrow: 1,
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none'
+              }}
+            >
+              LOGO
+            </Typography>
 
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            {/* Navigation Menu */}
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              {pages.map((page) => (
+                <Button
+                  key={page}
+                  component={Link}
+                  to={`/${page}`}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block', fontWeight: 'bold' }}
+                >
+                  {page}
+                </Button>
+              ))}
+            </Box>
+
+            {/* Mobile Menu Icon */}
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
               <IconButton
                 size="large"
-                aria-label="account of current user"
+                aria-label="menu"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleOpenNavMenu}
@@ -134,85 +116,62 @@ export default function Header() {
                 id="menu-appbar"
                 anchorEl={anchorElNav}
                 anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
+                  vertical: 'bottom',
+                  horizontal: 'left'
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
+                  vertical: 'top',
+                  horizontal: 'left'
                 }}
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
               >
                 {pages.map((page) => (
                   <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    {/* <Button component={Link} textAlign="center" to="/product"  >{page}</Button> */}
-                    <Link  to='/product' textAlign="center" >{page}</Link>
+                    <Typography textAlign="center">
+                      <Link to={`/${page}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        {page}
+                      </Link>
+                    </Typography>
                   </MenuItem>
-                  // <ListGroup key={page} onClick={handleCloseNavMenu}>
-                  //   <ListGroupItem textAlign="center" href="/product" tag="a">
-                  //     <Button component={Link} to="/Product"
-                  //     ></Button>
-                  //   </ListGroupItem>
-                  // </ListGroup>
                 ))}
               </Menu>
             </Box>
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
-              sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              LOGO
-            </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  component={Link}
-                  onClick={handleCloseNavMenu}
-                  to={`/${page}`}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
-                  {page}
-                </Button>
-              ))}
-            </Box>
 
+            {/* Cart and User Menu */}
             <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Cart">
+                <IconButton
+                  component={Link}
+                  to="/cart"
+                  sx={{ color: 'white' }}
+                >
+                  <CartIcon />
+                  <Typography variant="body2" color="inherit" sx={{ ml: 1 }}>
+                    {cart.length}
+                  </Typography>
+                </IconButton>
+              </Tooltip>
               <Tooltip title="Open settings">
-                <Button component={Link} to="/cart" variant="contained">
-                  Cart &nbsp; <span>{cart.length}</span>
-                </Button>
+                <IconButton
+                  onClick={handleOpenUserMenu}
+                  sx={{ color: 'white' }}
+                >
+                  <MenuIcon />
+                </IconButton>
               </Tooltip>
               <Menu
-                sx={{ mt: "45px" }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: 'top',
+                  horizontal: 'right'
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: 'top',
+                  horizontal: 'right'
                 }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
@@ -227,6 +186,10 @@ export default function Header() {
           </Toolbar>
         </Container>
       </AppBar>
+      {/* Main content component should have padding-top */}
+      <Container sx={{ pt: 8 }}>
+        {/* Your main content goes here */}
+      </Container>
     </>
   );
 }

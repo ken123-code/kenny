@@ -1,399 +1,227 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Unstable_Grid2";
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
-import SwipeableViews from "react-swipeable-views";
-import { useTheme } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-
-import "./section5.css";
-import Link from "@mui/material/Link";
 import axios from "axios";
-import NotFound from "../notFound/NotFound";
-const Item = styled(Paper)(({ theme }) => ({
-  //   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  //   ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  //   color: theme.palette.text.secondary,
+import Pagination from "@mui/material/Pagination";
+import TextField from "@mui/material/TextField";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Button from "@mui/material/Button";
+import { AppContext } from "../../AppContext";
+import 'aos/dist/aos.css'; // Import AOS styles
+import AOS from 'aos'; // Import AOS
+
+// // Initialize AOS
+// React.useEffect(() => {
+//   AOS.init({
+//     duration: 1000,
+//     once: true,
+//   });
+// }, []);
+
+// Styled components
+const CardImage = styled('img')(({ theme }) => ({
+  width: '100%',
+  height: 'auto',
+  objectFit: 'cover',
+  borderBottom: '1px solid #ddd', // Optional: adds a border line below the image
+  transition: 'transform 0.3s ease-in-out', // Smooth scaling transition
+  '&:hover': {
+    transform: 'scale(1.05)', // Scale up image slightly on hover
+  },
 }));
-// function TabPanel(props) {
-//   const { children, value, index, ...other } = props;
 
-//   return (
-//     <div
-//       role="tabpanel"
-//       hidden={value !== index}
-//       id={`full-width-tabpanel-${index}`}
-//       aria-labelledby={`full-width-tab-${index}`}
-//       {...other}
-//     >
-//       {value === index && (
-//         <Box sx={{ p: 3 }}>
-//           <Typography>{children}</Typography>
-//         </Box>
-//       )}
-//     </div>
-//   );
-// }
-// TabPanel.propTypes = {
-//   children: PropTypes.node,
-//   index: PropTypes.number.isRequired,
-//   value: PropTypes.number.isRequired,
-// };
-// function a11yProps(index) {
-//   return {
-//     id: `full-width-tab-${index}`,
-//     "aria-controls": `full-width-tabpanel-${index}`,
-//   };
-// }
-// Define a TabPanel component for consistency
-function TabPanel(props) {
-  const { children, value, index, dir } = props;
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      dir={dir}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-
-// Function to generate accessibility props
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
 export default function Section5() {
+  const { cart, setCart } = React.useContext(AppContext);
   const [categories, setCategories] = React.useState([]);
-
-  const theme = useTheme();
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const handleChangeIndex = (index) => {
-    setValue(index);
-  };
   const [data, setData] = React.useState([]);
-  // React.useEffect(()=>{
-  //   fetchData();
-  // },[])
-  const renderLinks = (category) => {
-    return data
-      .filter((item) => item.category === category)
-      .map((item) => (
-        <Link key={item.id} href="#" underline="none">
-          {item.name}
-        </Link>
-      ));
+  const [filteredData, setFilteredData] = React.useState([]);
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [sortOrder, setSortOrder] = React.useState("asc");
+  const [page, setPage] = React.useState(1);
+  const [selectedCategory, setSelectedCategory] = React.useState("");
+  const itemsPerPage = 4;
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
   };
+
+  const handleSortOrderChange = (event) => {
+    setSortOrder(event.target.value);
+  };
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
+  const handleAddToCart = (item) => {
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
+      if (existingItem) {
+        return prevCart.map((cartItem) =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      } else {
+        return [...prevCart, { ...item, quantity: 1 }];
+      }
+    });
+  };
+
   React.useEffect(() => {
     axios
-      .get(url)
+      .get("https://66a07be77053166bcabb8fcc.mockapi.io/student")
       .then((res) => {
         setData(res.data);
-        // Extract unique categories from data
-        const uniqueCategories = [
-          ...new Set(res.data.map((item) => item.category)),
-        ];
+        const uniqueCategories = [...new Set(res.data.map((item) => item.category))];
         setCategories(uniqueCategories);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
-  const url = "https://66a07be77053166bcabb8fcc.mockapi.io/student";
-  const fetchData = () => {
-    axios
-      .get(url)
-      .then(function (res) {
-        setData(res.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+
+  React.useEffect(() => {
+    let filtered = data.filter(
+      (item) =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.category.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    if (selectedCategory) {
+      filtered = filtered.filter((item) =>
+        item.category.toLowerCase().includes(selectedCategory.toLowerCase())
+      );
+    }
+
+    filtered = filtered.sort((a, b) =>
+      sortOrder === "asc" ? a.price - b.price : b.price - a.price
+    );
+
+    setFilteredData(filtered);
+  }, [searchTerm, sortOrder, data, selectedCategory]);
+
+  React.useEffect(() => {
+    AOS.refresh(); // Refresh AOS to apply animations to newly rendered elements
+  }, [filteredData, page]);
+
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedData = filteredData.slice(startIndex, endIndex);
 
   return (
-    <Box
-      sx={{ width: "90%", marginBottom: "40px", marginLeft: "80px" }}
-      columns={{ xs: 4, sm: 8, md: 12 }}
+    <Box sx={{ width: '100vw', 
+      // maxWidth: 1200, 
+      margin: '0 auto', 
+      padding: 2 , 
+      backgroundImage: 'url("https://static.vecteezy.com/system/resources/thumbnails/023/716/381/original/4k-colorful-summer-background-animation-with-space-area-fruits-orange-ice-cream-and-beach-ball-video.jpg")',
+    backgroundSize:'fixed',
+    backgroundAttachment: 'fixed',
+    // backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',}}
     >
-      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        {data.map((item, index) =>
-          index < 4 ? (
-            <Grid xs={12} sm={6} lg={2}>
-              <Card variant="outlined" sx={{ maxWidth: 360 }}>
-                <Box sx={{ p: 2 }}>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Typography gutterBottom variant="h5" component="div">
-                      {item.name}
-                    </Typography>
-                    <Typography gutterBottom variant="h6" component="div">
-                      ${item.price}
-                    </Typography>
-                  </Stack>
-                  <Typography color="text.secondary" variant="body2">
-                    {item.des}
-                  </Typography>
-                </Box>
-                <Divider />
-                <Box sx={{ p: 2 }}>
-                  <Typography gutterBottom variant="body2">
-                    Select type
-                  </Typography>
-                  <Stack direction="row" spacing={1}>
-                    <Chip color="primary" label="Soft" size="small" />
-                    <Chip label="Medium" size="small" />
-                    <Chip label="Hard" size="small" />
-                  </Stack>
-                </Box>
-              </Card>
-            </Grid>
-          ) : (
-            <></>
-          )
-        )}
-      </Grid>
-      <Grid xs={4}>
-        <Typography variant="h5" textAlign={"center"}>
-          Loai sach
-        </Typography>
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-            width: 400,
-            textAlign: "center",
-          }}
-        >
-          <AppBar position="static">
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              indicatorColor="secondary"
-              textColor="inherit"
-              variant="fullWidth"
-              aria-label="full width tabs example"
-            >
-              {categories.map((category, index) => (
-                <Tab label={category} {...a11yProps(index)} key={index} />
-              ))}
-            </Tabs>
-          </AppBar>
-          <SwipeableViews
-            axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-            index={value}
-            onChangeIndex={handleChangeIndex}
-          >
-            {categories.map((category, index) => (
-              <TabPanel
-                value={value}
-                index={index}
-                dir={theme.direction}
-                key={index}
-              >
-                {renderLinks(category)}
-              </TabPanel>
-            ))}
-          </SwipeableViews>
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        justifyContent:'center',
+        mb: 4, 
+        gap: 2 
+      }}>
+        <Box sx={{ width: '100%', maxWidth: 300 }}>
+          <TextField
+            label="Search by name or type"
+            variant="outlined"
+            onChange={handleSearch}
+            value={searchTerm}
+            fullWidth
+          />
         </Box>
-      </Grid>
-    </Box>
+        <Box sx={{ width: '100%', maxWidth: 300 }}>
+          <FormControl fullWidth>
+            <InputLabel>Sort by Price</InputLabel>
+            <Select
+              value={sortOrder}
+              onChange={handleSortOrderChange}
+              label="Sort by Price"
+            >
+              <MenuItem value="asc">Ascending</MenuItem>
+              <MenuItem value="desc">Descending</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        <Box sx={{ width: '100%', maxWidth: 300 }}>
+          <TextField
+            label="Filter by Category"
+            variant="outlined"
+            onChange={handleCategoryChange}
+            value={selectedCategory}
+            fullWidth
+          />
+        </Box>
+      </Box>
 
-    // {/* <Grid xs={12} sm={6} lg={2}>
-    //   <Card variant="outlined" sx={{ maxWidth: 360 }}>
-    //     <Box sx={{ p: 2 }}>
-    //       <Stack
-    //         direction="row"
-    //         justifyContent="space-between"
-    //         alignItems="center"
-    //       >
-    //         <Typography gutterBottom variant="h5" component="div">
-    //           Toothbrush
-    //         </Typography>
-    //         <Typography gutterBottom variant="h6" component="div">
-    //           $4.50
-    //         </Typography>
-    //       </Stack>
-    //       <Typography color="text.secondary" variant="body2">
-    //         Pinstriped cornflower blue cotton blouse takes you on a walk to
-    //         the park or just down the hall.
-    //       </Typography>
-    //     </Box>
-    //     <Divider />
-    //     <Box sx={{ p: 2 }}>
-    //       <Typography gutterBottom variant="body2">
-    //         Select type
-    //       </Typography>
-    //       <Stack direction="row" spacing={1}>
-    //         <Chip color="primary" label="Soft" size="small" />
-    //         <Chip label="Medium" size="small" />
-    //         <Chip label="Hard" size="small" />
-    //       </Stack>
-    //     </Box>
-    //   </Card>
-    // </Grid>
-    // <Grid xs={12} sm={6} lg={2}>
-    //   <Card variant="outlined" sx={{ maxWidth: 360 }}>
-    //     <Box sx={{ p: 2 }}>
-    //       <Stack
-    //         direction="row"
-    //         justifyContent="space-between"
-    //         alignItems="center"
-    //       >
-    //         <Typography gutterBottom variant="h5" component="div">
-    //           Toothbrush
-    //         </Typography>
-    //         <Typography gutterBottom variant="h6" component="div">
-    //           $4.50
-    //         </Typography>
-    //       </Stack>
-    //       <Typography color="text.secondary" variant="body2">
-    //         Pinstriped cornflower blue cotton blouse takes you on a walk to
-    //         the park or just down the hall.
-    //       </Typography>
-    //     </Box>
-    //     <Divider />
-    //     <Box sx={{ p: 2 }}>
-    //       <Typography gutterBottom variant="body2">
-    //         Select type
-    //       </Typography>
-    //       <Stack direction="row" spacing={1}>
-    //         <Chip color="primary" label="Soft" size="small" />
-    //         <Chip label="Medium" size="small" />
-    //         <Chip label="Hard" size="small" />
-    //       </Stack>
-    //     </Box>
-    //   </Card>
-    // </Grid>
-    // <Grid xs={12} sm={6} lg={2}>
-    //   <Card variant="outlined" sx={{ maxWidth: 360 }}>
-    //     <Box sx={{ p: 2 }}>
-    //       <Stack
-    //         direction="row"
-    //         justifyContent="space-between"
-    //         alignItems="center"
-    //       >
-    //         <Typography gutterBottom variant="h5" component="div">
-    //           Toothbrush
-    //         </Typography>
-    //         <Typography gutterBottom variant="h6" component="div">
-    //           $4.50
-    //         </Typography>
-    //       </Stack>
-    //       <Typography color="text.secondary" variant="body2">
-    //         Pinstriped cornflower blue cotton blouse takes you on a walk to
-    //         the park or just down the hall.
-    //       </Typography>
-    //     </Box>
-    //     <Divider />
-    //     <Box sx={{ p: 2 }}>
-    //       <Typography gutterBottom variant="body2">
-    //         Select type
-    //       </Typography>
-    //       <Stack direction="row" spacing={1}>
-    //         <Chip color="primary" label="Soft" size="small" />
-    //         <Chip label="Medium" size="small" />
-    //         <Chip label="Hard" size="small" />
-    //       </Stack>
-    //     </Box>
-    //   </Card>
-    // </Grid> */}
-    //     <Grid xs={4}>
-    //       <Typography variant="h5" textAlign={"center"}>
-    //         Loai sach
-    //       </Typography>
-    //       <Box
-    //         sx={{
-    //           bgcolor: "background.paper",
-    //           width: 400,
-    //           textAlign: "center",
-    //         }}
-    //       >
-    //         <AppBar position="static">
-    //           <Tabs
-    //             value={value}
-    //             onChange={handleChange}
-    //             indicatorColor="secondary"
-    //             textColor="inherit"
-    //             variant="fullWidth"
-    //             aria-label="full width tabs example"
-    //           >
-    //             <Tab label="Item One" {...a11yProps(0)} />
-    //             <Tab label="Item Two" {...a11yProps(1)} />
-    //             <Tab label="Item Three" {...a11yProps(2)} />
-    //           </Tabs>
-    //         </AppBar>
-    //         <SwipeableViews
-    //           axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-    //           index={value}
-    //           onChangeIndex={handleChangeIndex}
-    //         >
-    //           <TabPanel value={value} index={0} dir={theme.direction}>
-    //             <Link href="#" underline="none">
-    //               {"Sách1"}
-    //             </Link>
-    //             <Link href="#" underline="none">
-    //               {"Sách1"}
-    //             </Link>
-    //             <Link href="#" underline="none">
-    //               {"Sách1"}
-    //             </Link>
-    //           </TabPanel>
-    //           <TabPanel value={value} index={1} dir={theme.direction}>
-    //           <Link href="#" underline="none">
-    //               {"Sách1"}
-    //             </Link>
-    //             <Link href="#" underline="none">
-    //               {"Sách1"}
-    //             </Link>
-    //             <Link href="#" underline="none">
-    //               {"Sách1"}
-    //             </Link>
-    //           </TabPanel>
-    //           <TabPanel value={value} index={2} dir={theme.direction}>
-    //           <Link href="#" underline="none">
-    //               {"Sách1"}
-    //             </Link>
-    //             <Link href="#" underline="none">
-    //               {"Sách1"}
-    //             </Link>
-    //             <Link href="#" underline="none">
-    //               {"Sách1"}
-    //             </Link>
-    //           </TabPanel>
-    //         </SwipeableViews>
-    //       </Box>
-    //     </Grid>
-    //     {/* <Grid xs={6}>
-    //       <Item>3</Item>
-    //     </Grid>
-    //     <Grid xs={6}>
-    //       <Item>4</Item>
-    //     </Grid> */}
-    //   </Grid>
-    // </Box>
+      <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }} justifyContent="center">
+        {paginatedData.map((item) => (
+          <Grid xs={12} sm={6} lg={3} key={item.id}>
+            <Card variant="outlined" sx={{ maxWidth: 360, mx: 'auto' }} data-aos="fade-down-right">
+              <CardImage 
+                src={item.img}
+                alt={item.name}
+                onError={(e) => e.target.src = '/path/to/placeholder/image.jpg'} // Fallback image on error
+              />
+              <Box sx={{ p: 2 }}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Typography gutterBottom variant="h5" component="div">
+                    {item.name}
+                  </Typography>
+                  <Typography gutterBottom variant="h6" component="div">
+                    ${item.price}
+                  </Typography>
+                </Stack>
+                <Typography color="text.secondary" variant="body2">
+                  {item.des}
+                </Typography>
+              </Box>
+              <Divider />
+              <Box sx={{ p: 2 }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleAddToCart(item)}
+                  sx={{ width: '100%' }} // Ensure button takes full width
+                >
+                  Add to Cart
+                </Button>
+              </Box>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+        <Pagination
+          count={Math.ceil(filteredData.length / itemsPerPage)}
+          page={page}
+          onChange={handlePageChange}
+        />
+      </Box>
+    </Box>
   );
 }

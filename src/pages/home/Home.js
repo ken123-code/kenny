@@ -9,6 +9,7 @@ import Cats from "../../components/redux/Cats";
 import Section4 from '../../components/section4/Section4'
 import Section5 from '../../components/section5/Section5'
 import Section6 from '../../components/section6/Section6'
+import Section7 from '../../components/section7/Section7'
 export default function Home() {
   return (
     <div>
@@ -18,6 +19,7 @@ export default function Home() {
       <Section3/>
       <Section4/>
       <Section5/>
+      <Section7/>
       <Section6/>
       <Footer />
     </div>

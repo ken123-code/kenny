@@ -1,151 +1,160 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
-import ListSubheader from "@mui/material/ListSubheader";
 import IconButton from "@mui/material/IconButton";
-import InfoIcon from "@mui/icons-material/Info";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
-
-import "./section3.css";
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // Import AOS styles
 import axios from "axios";
+
+// Initialize AOS
+AOS.init();
+
 function srcset(image, size, rows = 1, cols = 1) {
   return {
     src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${
-      size * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
+    srcSet: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format&dpr=2 2x`,
   };
 }
+
 export default function Section3() {
-  const [data,setData]=React.useState([])
-  React.useEffect(()=>{
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
     fetchData();
-  },[])
-  const url="https://66a07be77053166bcabb8fcc.mockapi.io/student"
-  const fetchData =()=>{
+  }, []);
+
+  const url = "https://66a07be77053166bcabb8fcc.mockapi.io/student";
+
+  const fetchData = () => {
     axios.get(url)
-    .then(function(res){
-        setData(res.data)
-    })
-    .catch(function(error){
-      console.log(error)
-    })
-  }
+      .then(function (res) {
+        // Limit the number of items to 5
+        setData(res.data.slice(0, 5));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <React.Fragment>
       <CssBaseline />
-      <Container maxWidth="sm">
-        <Box sx={{ bgcolor: "#cfe8fc", height: "100vh" }}>
-        <ImageList
-      sx={{ width: '100%', height: '80%' }}
-      variant="quilted"
-      cols={4}
-      rowHeight={150}
-    >
-      {itemData.map((item) => (
-        <ImageListItem  key={item.img} cols={item.cols || 1} rows={item.rows || 1}>
-          <img
-            {...srcset(item.img, 121, item.rows, item.cols)}
-            alt={item.title}
-            //
-            srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-            src={`${item.img}?w=248&fit=crop&auto=format`}
-            // alt={item.title}
-            loading="lazy"
-          />
-          <ImageListItemBar
+      <Box
+        sx={{
+          position: 'relative',
+          height: '88vh',
+          overflow: 'hidden',
+          backgroundImage: 'url("https://demo2.pavothemes.com/bookory/wp-content/uploads/2022/11/newletter_bg.jpg")',
+          backgroundSize: 'cover',
+          backgroundAttachment: 'fixed',
+          // backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backdropFilter: 'blur(5px)', // Apply frosted glass effect
+            backgroundColor: 'rgba(255, 255, 255, 0.3)', // Optional: add a semi-transparent white background to enhance the effect
+            zIndex: 1, // Ensure this box is above the background image
+          }}
+        >
+          <Container
+            maxWidth={false}
+            sx={{
+              width: '90%',
+              margin: '0 auto',
+              position: 'relative',
+              zIndex: 2, // Ensure content is above the frosted effect box
+              padding: 2, // Add padding for content
+            }}
+          >
+            <Box
               sx={{
-                background:
-                  'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-                  'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
               }}
-              title={item.title}
-              position="top"
-              actionIcon={
-                <IconButton
-                  sx={{ color: 'white' }}
-                  aria-label={`star ${item.title}`}
-                >
-                  <StarBorderIcon />
-                </IconButton>
-              }
-              actionPosition="left"
-            />
-        </ImageListItem>
-      ))}
-    </ImageList>
+            >
+              <ImageList
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                  width: '100%',
+                  rowHeight: 'auto',
+                  gap: 4,
+                }}
+                variant="quilted"
+                cols={5}
+              >
+                {data.map((item) => (
+                  <ImageListItem
+                    key={item.id}
+                    cols={1}
+                    rows={1}
+                    data-aos="fade-right"
+                    sx={{
+                      overflow: 'hidden',
+                      borderRadius: '30%', // Ensure the container is circular
+                      position: 'relative', // Ensure child elements are positioned relative to this container
+                      '&:hover img': {
+                        transform: 'scale(1.1)', // Scale up image on hover
+                      },
+                      transition: 'transform 0.3s ease-in-out', // Smooth transition
+                    }}
+                  >
+                    <Link  to={`/detail/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <img
+                        {...srcset(item.img, 121, item.rows, item.cols)}
+                        alt={item.title}
+                        loading="lazy"
+                        style={{
+                          width: '100%',
+                          height: 'auto',
+                          objectFit: 'cover',
+                          borderRadius: '50%', // Make the image round
+                          transition: 'transform 0.3s ease-in-out', // Smooth transition
+                        }}
+                      />
+                    </Link>
+                    {/* <ImageListItemBar
+                      sx={{
+                        background: 'transparent', // Remove the gradient effect
+                        color: 'white',
+                        top: 0,
+                        height: '100%',
+                        zIndex: 0
+                      }}
+                      title={item.title}
+                      position="top"
+                      actionIcon={
+                        <IconButton
+                          sx={{ color: 'white' }}
+                          aria-label={`star ${item.title}`}
+                        >
+                          <StarBorderIcon />
+                        </IconButton>
+                      }
+                      actionPosition="left"
+                    /> */}
+                  </ImageListItem>
+                ))}
+              </ImageList>
+            </Box>
+          </Container>
         </Box>
-      </Container>
+      </Box>
     </React.Fragment>
   );
 }
-const itemData = [
-    {
-      img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-      title: 'Breakfast',
-      rows: 3,
-      cols: 2,
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-      title: 'Burger',
-      rows: 2,
-      cols: 1,
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-      title: 'Camera',
-      rows: 1,
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-      title: 'Coffee',
-      rows: 2,
-      cols: 1,
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-      title: 'Hats',
-      cols: 1,
-     
-    },
-    // {
-    //   img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-    //   title: 'Honey',
-    //   author: '@arwinneil',
-    //   rows: 2,
-    //   cols: 2,
-    // },
-    // {
-    //   img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-    //   title: 'Basketball',
-    // },
-    // {
-    //   img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-    //   title: 'Fern',
-    // },
-    // {
-    //   img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-    //   title: 'Mushrooms',
-    //   rows: 2,
-    //   cols: 2,
-    // },
-    // {
-    //   img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-    //   title: 'Tomato basil',
-    // },
-    // {
-    //   img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-    //   title: 'Sea star',
-    // },
-    // {
-    //   img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-    //   title: 'Bike',
-    //   cols: 2,
-    // },
-  ];    
