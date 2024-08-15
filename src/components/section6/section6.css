@@ -1,0 +1,36 @@
+.slider-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .slider-item {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+  
+  .img-link {
+    display: block;
+  }
+  
+  .slider-img {
+    display: block;
+    width: 50%; /* Ensures image scales to container width */
+    height: auto; /* Maintains aspect ratio */
+    max-width: 100%; /* Prevents image from exceeding its container */
+    object-fit: cover; /* Ensures image covers the container without distortion */
+  }
+  
+  @media (max-width: 1024px) {
+    .slider-img {
+      width: 50%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .slider-img {
+      width: 50%;
+    }
+  }
+  
