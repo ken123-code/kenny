@@ -1,82 +1,42 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import ImageListItemBar from "@mui/material/ImageListItemBar";
-import IconButton from "@mui/material/IconButton";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import AOS from 'aos';
-import 'aos/dist/aos.css'; // Import AOS styles
-import axios from "axios";
+import React from 'react';
+import { Grid, Paper, Typography, Button, Box } from '@mui/material';
 
-// Initialize AOS
-AOS.init();
-
-function srcset(image, size, rows = 1, cols = 1) {
-  return {
-    src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format&dpr=2 2x`,
-  };
-}
-
-export default function Section3() {
-  const [data, setData] = React.useState([]);
-
-  React.useEffect(() => {
-    fetchData();
-  }, []);
-
-  const url = "https://66a07be77053166bcabb8fcc.mockapi.io/student";
-
-  const fetchData = () => {
-    axios.get(url)
-      .then(function (res) {
-        // Limit the number of items to 5
-        setData(res.data.slice(0, 5));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
+const Section3 = () => {
   return (
-    <React.Fragment>
-      <CssBaseline />
-      <Box
-        sx={{
-          position: 'relative',
-          height: '88vh',
-          overflow: 'hidden',
-          backgroundImage: 'url("https://demo2.pavothemes.com/bookory/wp-content/uploads/2022/11/newletter_bg.jpg")',
-          backgroundSize: 'cover',
-          backgroundAttachment: 'fixed',
-          // backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+    <Box sx={{ textAlign: 'center', mb: 4, mt:4 ,mb:4 }}>
+      <Typography 
+        variant="h2" 
+        component="h1" 
+        sx={{ 
+          fontWeight: 'bold', 
+          mb: 4, 
+          color: 'primary.main'
         }}
       >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backdropFilter: 'blur(5px)', // Apply frosted glass effect
-            backgroundColor: 'rgba(255, 255, 255, 0.3)', // Optional: add a semi-transparent white background to enhance the effect
-            zIndex: 1, // Ensure this box is above the background image
-          }}
-        >
-          <Container
-            maxWidth={false}
+        About Us
+      </Typography>
+      <Grid container spacing={3} >
+        <Grid item xs={12} md={6} lg={4}>
+          <Paper
+            elevation={1}
             sx={{
-              width: '90%',
-              margin: '0 auto',
-              position: 'relative',
-              zIndex: 2, // Ensure content is above the frosted effect box
-              padding: 2, // Add padding for content
+              color: 'white',
+              display: 'grid',
+              flexDirection: 'column',
+              minWidth: 0,
+              overflowWrap: 'break-word',
+              backgroundColor: 'rgb(255, 255, 255)',
+              backgroundClip: 'border-box',
+              boxShadow: 'rgba(0, 0, 0, 0.1) 0rem 0.25rem 0.375rem -0.0625rem, rgba(0, 0, 0, 0.06) 0rem 0.125rem 0.25rem -0.0625rem',
+              backgroundImage: 'linear-gradient(195deg, rgba(66, 66, 74, 0.9), rgba(25, 25, 25, 0.9)), url(https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/assets/img/team-working.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center center',
+              height: '400px', // Adjust height as needed
+              transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+              borderRadius: '0.75rem',
+              placeItems: 'center',
+              marginLeft: '20px', // Left margin
+              marginRight: '20px', // Right margin
             }}
           >
             <Box
@@ -84,77 +44,145 @@ export default function Section3() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                justifyContent: 'center',
+                padding: '16px',
+                textAlign: 'center',
+                color: 'white', // Set text color to white
               }}
             >
-              <ImageList
-                sx={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  justifyContent: 'center',
-                  width: '100%',
-                  rowHeight: 'auto',
-                  gap: 4,
-                }}
-                variant="quilted"
-                cols={5}
+              <Typography variant="caption" color="white">
+                Productivity
+              </Typography>
+              <Typography variant="h4" gutterBottom color="white">
+                Search and Discover!
+              </Typography>
+              <Typography variant="body2" paragraph color="white">
+                Don't be scared of the truth because we need to restart the human foundation in truth. And I love you like Kanye loves Kanye. I love Rick Owens’ bed design.
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ marginTop: '16px' }}
+                href="#/sections/page-sections/applications"
               >
-                {data.map((item) => (
-                  <ImageListItem
-                    key={item.id}
-                    cols={1}
-                    rows={1}
-                    data-aos="fade-right"
-                    sx={{
-                      overflow: 'hidden',
-                      borderRadius: '30%', // Ensure the container is circular
-                      position: 'relative', // Ensure child elements are positioned relative to this container
-                      '&:hover img': {
-                        transform: 'scale(1.1)', // Scale up image on hover
-                      },
-                      transition: 'transform 0.3s ease-in-out', // Smooth transition
-                    }}
-                  >
-                    <Link  to={`/detail/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <img
-                        {...srcset(item.img, 121, item.rows, item.cols)}
-                        alt={item.title}
-                        loading="lazy"
-                        style={{
-                          width: '100%',
-                          height: 'auto',
-                          objectFit: 'cover',
-                          borderRadius: '50%', // Make the image round
-                          transition: 'transform 0.3s ease-in-out', // Smooth transition
-                        }}
-                      />
-                    </Link>
-                    {/* <ImageListItemBar
-                      sx={{
-                        background: 'transparent', // Remove the gradient effect
-                        color: 'white',
-                        top: 0,
-                        height: '100%',
-                        zIndex: 0
-                      }}
-                      title={item.title}
-                      position="top"
-                      actionIcon={
-                        <IconButton
-                          sx={{ color: 'white' }}
-                          aria-label={`star ${item.title}`}
-                        >
-                          <StarBorderIcon />
-                        </IconButton>
-                      }
-                      actionPosition="left"
-                    /> */}
-                  </ImageListItem>
-                ))}
-              </ImageList>
+                Get Started
+              </Button>
             </Box>
-          </Container>
-        </Box>
-      </Box>
-    </React.Fragment>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={6} lg={4}>
+          <Paper
+            elevation={1}
+            sx={{
+              color: 'white',
+              display: 'grid',
+              flexDirection: 'column',
+              minWidth: 0,
+              overflowWrap: 'break-word',
+              backgroundColor: 'rgb(255, 255, 255)',
+              backgroundClip: 'border-box',
+              boxShadow: 'rgba(0, 0, 0, 0.1) 0rem 0.25rem 0.375rem -0.0625rem, rgba(0, 0, 0, 0.06) 0rem 0.125rem 0.25rem -0.0625rem',
+              backgroundImage: 'linear-gradient(195deg, rgba(66, 66, 74, 0.9), rgba(25, 25, 25, 0.9)), url(https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/assets/img/team-working.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center center',
+              height: '400px', // Adjust height as needed
+              transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+              borderRadius: '0.75rem',
+              placeItems: 'center',
+              marginLeft: '10px', // Left margin
+              marginRight: '10px', // Right margin
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '16px',
+                textAlign: 'center',
+                color: 'white', // Set text color to white
+              }}
+            >
+              <Typography variant="caption" color="white">
+                Design
+              </Typography>
+              <Typography variant="h4" gutterBottom color="white">
+                Find music and play it!
+              </Typography>
+              <Typography variant="body2" paragraph color="white">
+                As we live, our hearts turn colder. Cause pain is what we go through as we become older. We get insulted by others, lose trust for those others.
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ marginTop: '16px' }}
+                href="#/sections/page-sections/applications"
+              >
+                Get Started
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={6} lg={4}>
+          <Paper
+            elevation={1}
+            sx={{
+              color: 'white',
+              display: 'grid',
+              flexDirection: 'column',
+              minWidth: 0,
+              overflowWrap: 'break-word',
+              backgroundColor: 'rgb(255, 255, 255)',
+              backgroundClip: 'border-box',
+              boxShadow: 'rgba(0, 0, 0, 0.1) 0rem 0.25rem 0.375rem -0.0625rem, rgba(0, 0, 0, 0.06) 0rem 0.125rem 0.25rem -0.0625rem',
+              backgroundImage: 'linear-gradient(195deg, rgba(66, 66, 74, 0.9), rgba(25, 25, 25, 0.9)), url(https://raw.githubusercontent.com/creativetimofficial/public-assets/master/soft-ui-design-system/assets/img/team-working.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center center',
+              height: '400px', // Adjust height as needed
+              transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+              borderRadius: '0.75rem',
+              placeItems: 'center',
+              marginLeft: '10px', // Left margin
+              marginRight: '10px', // Right margin
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '16px',
+                textAlign: 'center',
+                color: 'white', // Set text color to white
+              }}
+            >
+              <Typography variant="caption" color="white">
+                Support
+              </Typography>
+              <Typography variant="h4" gutterBottom color="white">
+                Check bugs and fix!
+              </Typography>
+              <Typography variant="body2" paragraph color="white">
+                If you have the opportunity to play this game of life you need to appreciate every moment. A lot of people don’t appreciate the moment until it’s passed.
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ marginTop: '16px' }}
+                href="#/sections/page-sections/applications"
+              >
+                Get Started
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
   );
-}
+};
+
+export default Section3;

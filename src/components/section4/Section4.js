@@ -8,14 +8,31 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import emailjs from 'emailjs-com';
 
-// Custom theme if needed
+// Custom theme with responsive typography
 const theme = createTheme({
   palette: {
     primary: {
-      main: grey[800], // Customize primary color if needed
+      main: grey[800],
     },
     secondary: {
-      main: grey[600], // Customize secondary color if needed
+      main: grey[600],
+    },
+  },
+  typography: {
+    h2: {
+      fontSize: '2rem',
+      '@media (max-width:1200px)': {
+        fontSize: '1.75rem',
+      },
+      '@media (max-width:900px)': {
+        fontSize: '1.5rem',
+      },
+      '@media (max-width:600px)': {
+        fontSize: '1.25rem',
+      },
+      '@media (max-width:400px)': {
+        fontSize: '1rem',
+      },
     },
   },
 });
@@ -62,32 +79,33 @@ const Section4 = () => {
       <React.Fragment>
         <CssBaseline />
         <Container
-          maxWidth='lg'
+          maxWidth='md' // Change this to 'lg' or another size if needed
           sx={{
             backgroundColor: grey[100],
             borderRadius: 2,
-            backdropFilter: 'blur(10px)', // Apply background blur effect
-            padding: 2,
+            backdropFilter: 'blur(10px)',
+            padding: 3, // Increase padding for better spacing
             boxShadow: 3,
-            height: 'calc(100vh - 20px)', // Full viewport height minus top and bottom margins
-            marginTop: 10, // Margin top for desktop
-            marginBottom: 10, // Margin bottom for desktop
+            marginTop: 10,
+            marginBottom: 10,
             display: 'flex',
-            alignItems: 'center', // Center content vertically
-            justifyContent: 'center', // Center content horizontally
+            alignItems: 'center',
+            justifyContent: 'center',
+            mx: 'auto', // Center container horizontally with auto margins
           }}
         >
           <Box
             sx={{
               width: '100%',
-              maxWidth: 600, // Set a maximum width for better alignment
+              maxWidth: 600,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              '& .MuiTextField-root': { m: 1, width: '100%' }, // Full width for input fields
+              '& .MuiTextField-root': { m: 1, width: '100%' },
+              gap: 2, // Add gap between form elements
             }}
           >
-            <Typography variant="h2" sx={{ mb: 2 , textAlign:'center'}}>
+            <Typography variant="h2" sx={{ mb: 2, textAlign: 'center' }}>
               Thông tin khách hàng
             </Typography>
             <Box
@@ -142,7 +160,7 @@ const Section4 = () => {
                   <Typography
                     variant="body1"
                     component="span"
-                    sx={{ ml: 1 }} // Add margin-left to space the text from the checkbox
+                    sx={{ ml: 1 }}
                   >
                     I agree to the{' '}
                     <a href="#" style={{ textDecoration: 'underline' }}>

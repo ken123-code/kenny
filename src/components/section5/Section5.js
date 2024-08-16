@@ -48,6 +48,8 @@ export default function Section5() {
   const [page, setPage] = React.useState(1);
   const [selectedCategory, setSelectedCategory] = React.useState("");
   const itemsPerPage = 4;
+  const [loading, setLoading] = React.useState(true);
+const [error, setError] = React.useState(null);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -121,16 +123,33 @@ export default function Section5() {
   const endIndex = startIndex + itemsPerPage;
   const paginatedData = filteredData.slice(startIndex, endIndex);
 
+  React.useEffect(() => {
+    axios
+      .get("https://66a07be77053166bcabb8fcc.mockapi.io/student")
+      .then((res) => {
+        setData(res.data);
+        const uniqueCategories = [...new Set(res.data.map((item) => item.category))];
+        setCategories(uniqueCategories);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setError("Failed to load data");
+        setLoading(false);
+      });
+  }, []);
+  
+  if (loading) return <Typography variant="h6" align="center">Loading...</Typography>;
+  if (error) return <Typography variant="h6" align="center" color="error">{error}</Typography>;
   return (
-    <Box sx={{ width: '100vw', 
-      // maxWidth: 1200, 
-      margin: '0 auto', 
-      padding: 2 , 
+    <Box sx={{ width: '100%', // Đảm bảo rằng Box chiếm toàn bộ chiều rộng
+      maxWidth: '100vw', // Giới hạn chiều rộng tối đa của nội dung
+      margin: '0 auto', // Center Box horizontally
+      padding: 2,
       backgroundImage: 'url("https://static.vecteezy.com/system/resources/thumbnails/023/716/381/original/4k-colorful-summer-background-animation-with-space-area-fruits-orange-ice-cream-and-beach-ball-video.jpg")',
-    backgroundSize:'fixed',
-    backgroundAttachment: 'fixed',
-    // backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',}}
+      backgroundSize: 'cover',
+      backgroundAttachment: 'fixed',
+      backgroundRepeat: 'no-repeat',}}
     >
       <Box sx={{ 
         display: 'flex', 
@@ -138,7 +157,8 @@ export default function Section5() {
         alignItems: 'center', 
         justifyContent:'center',
         mb: 4, 
-        gap: 2 
+        gap: 2,
+        flexWrap: 'wrap', // Đảm bảo rằng các phần tử không bị tràn ra ngoài màn hình
       }}>
         <Box sx={{ width: '100%', maxWidth: 300 }}>
           <TextField
